@@ -1,0 +1,640 @@
+<title>Talenesia Data Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #F1F3F1;
+    --surface: #FFFFFF;
+    --surface-2: #E9EDEA;
+    --ink: #16232E;
+    --ink-muted: #52626B;
+    --ink-faint: #7C8A85;
+    --accent: #1F6F6B;
+    --accent-ink: #0F4744;
+    --accent-2: #A6591E;
+    --accent-2-bg: #FBF0E4;
+    --accent-bg: #E7F1EF;
+    --line: #D8DED9;
+    --line-strong: #B7C3BC;
+    --shadow: 0 1px 2px rgba(15,40,35,0.06), 0 8px 24px -12px rgba(15,40,35,0.12);
+    --radius: 10px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg: #0F1613;
+      --surface: #161F1B;
+      --surface-2: #1D2822;
+      --ink: #E7EDE9;
+      --ink-muted: #9FB0A6;
+      --ink-faint: #6F7F77;
+      --accent: #5AC4BC;
+      --accent-ink: #CFF2EE;
+      --accent-2: #E0954D;
+      --accent-2-bg: #2B2119;
+      --accent-bg: #16302C;
+      --line: #2A362F;
+      --line-strong: #3C4A41;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg: #0F1613;
+    --surface: #161F1B;
+    --surface-2: #1D2822;
+    --ink: #E7EDE9;
+    --ink-muted: #9FB0A6;
+    --ink-faint: #6F7F77;
+    --accent: #5AC4BC;
+    --accent-ink: #CFF2EE;
+    --accent-2: #E0954D;
+    --accent-2-bg: #2B2119;
+    --accent-bg: #16302C;
+    --line: #2A362F;
+    --line-strong: #3C4A41;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+    padding-inline: 0;
+    padding-block: env(safe-area-inset-top, 0px) 64px;
+  }
+  h1,h2,h3{
+    font-family: "Fraunces", Georgia, serif;
+    font-weight: 600;
+    text-wrap: balance;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+  a{ color: var(--accent-ink); }
+  .mono{ font-family: "IBM Plex Mono", ui-monospace, monospace; }
+
+  /* ---------- shell ---------- */
+  .shell{
+    max-width: 1180px;
+    margin: 0 auto;
+    padding-inline: 20px;
+    display: grid;
+    grid-template-columns: 220px minmax(0,1fr);
+    gap: 40px;
+  }
+  @media (max-width: 900px){
+    .shell{ grid-template-columns: 1fr; }
+  }
+
+  /* ---------- masthead ---------- */
+  .masthead{
+    grid-column: 1 / -1;
+    padding-block: 40px 28px;
+    border-bottom: 1px solid var(--line-strong);
+    margin-bottom: 8px;
+  }
+  .eyebrow{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent-ink);
+    background: var(--accent-bg);
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    margin-bottom: 18px;
+  }
+  .masthead h1{
+    font-size: clamp(30px, 5vw, 46px);
+    line-height: 1.08;
+    margin: 0 0 12px;
+  }
+  .masthead .dek{
+    font-size: 17px;
+    color: var(--ink-muted);
+    max-width: 62ch;
+    line-height: 1.55;
+    margin: 0 0 22px;
+  }
+  .meta-row{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 26px;
+    font-size: 13px;
+  }
+  .meta-row div{ display:flex; flex-direction:column; gap:2px; }
+  .meta-row .k{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .meta-row .v{ color: var(--ink); font-weight: 500; }
+
+  /* ---------- stat strip ---------- */
+  .stats{
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 36px;
+  }
+  @media (max-width: 900px){ .stats{ grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 520px){ .stats{ grid-template-columns: repeat(2, 1fr); } }
+  .stat{
+    background: var(--surface);
+    padding: 16px 14px;
+    display:flex; flex-direction:column; gap:4px;
+  }
+  .stat .num{
+    font-family: "IBM Plex Mono", monospace;
+    font-variant-numeric: tabular-nums;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--accent-ink);
+  }
+  .stat .lbl{ font-size: 11.5px; color: var(--ink-muted); line-height:1.3; }
+
+  /* ---------- nav rail ---------- */
+  nav.rail{
+    align-self: start;
+    position: sticky;
+    top: max(24px, env(safe-area-inset-top, 0px));
+    font-size: 13px;
+  }
+  nav.rail .rail-title{
+    font-family:"IBM Plex Mono",monospace;
+    font-size: 10.5px;
+    letter-spacing:0.1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 10px;
+  }
+  nav.rail ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:2px; counter-reset: navsec; }
+  nav.rail a{
+    counter-increment: navsec;
+    display:block;
+    text-decoration:none;
+    color: var(--ink-muted);
+    padding: 5px 8px;
+    border-radius: 6px;
+    line-height:1.35;
+  }
+  nav.rail a::before{
+    content: counter(navsec) "  ";
+    font-family:"IBM Plex Mono",monospace;
+    color: var(--ink-faint);
+  }
+  nav.rail a:hover{ background: var(--surface-2); color: var(--ink); }
+  details.mobile-toc{ display:none; }
+  @media (max-width: 900px){
+    nav.rail{ display:none; }
+    details.mobile-toc{
+      display:block;
+      grid-column: 1/-1;
+      margin-bottom: 24px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      padding: 4px 14px;
+    }
+    details.mobile-toc summary{
+      cursor:pointer; padding:10px 0; font-family:"IBM Plex Mono",monospace; font-size:12.5px;
+      letter-spacing:0.06em; text-transform:uppercase; color:var(--accent-ink);
+    }
+    details.mobile-toc ol{ list-style:none; margin:0 0 12px; padding:0; columns:2; gap:4px 16px; counter-reset: mnav; }
+    details.mobile-toc a{ counter-increment: mnav; text-decoration:none; color:var(--ink-muted); font-size:13px; display:block; padding:3px 0; break-inside:avoid; }
+    details.mobile-toc a::before{ content: counter(mnav) ". "; color:var(--ink-faint); }
+  }
+
+  /* ---------- main content ---------- */
+  main{ min-width:0; padding-bottom: 40px; }
+  section{ scroll-margin-top: 20px; padding-top: 6px; margin-bottom: 44px; }
+  section > .sec-head{
+    display:flex; align-items:baseline; gap:12px;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 10px;
+    margin-bottom: 18px;
+  }
+  section > .sec-head .sn{
+    font-family:"IBM Plex Mono",monospace;
+    color: var(--ink-faint);
+    font-size: 15px;
+  }
+  section > .sec-head h2{ font-size: 24px; margin:0; }
+  h3{ font-size: 18px; margin: 26px 0 10px; color: var(--accent-ink); }
+  p{ line-height: 1.65; color: var(--ink); max-width: 74ch; margin: 0 0 14px; font-size: 15.5px; }
+  ul, ol.plain{ margin: 0 0 16px; padding-left: 22px; max-width: 74ch; }
+  ul li, ol.plain li{ line-height:1.6; margin-bottom:7px; font-size:15.5px; }
+  strong{ color: var(--ink); }
+
+  /* ---------- tables ---------- */
+  .tbl-wrap{ overflow-x:auto; margin: 0 0 20px; border:1px solid var(--line); border-radius: var(--radius); }
+  table{ border-collapse: collapse; width:100%; min-width: 560px; font-size: 14px; }
+  thead th{
+    text-align:left; font-family:"IBM Plex Mono",monospace; font-weight:600;
+    font-size:11.5px; letter-spacing:0.05em; text-transform:uppercase;
+    background: var(--ink); color: var(--bg);
+    padding: 10px 14px;
+  }
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) thead th{ background: var(--surface-2); color: var(--accent-ink); } }
+  :root[data-theme="dark"] thead th{ background: var(--surface-2); color: var(--accent-ink); }
+  tbody td{ padding: 10px 14px; border-top:1px solid var(--line); vertical-align:top; line-height:1.5; color:var(--ink); }
+  tbody tr:nth-child(even){ background: var(--surface-2); }
+  tbody tr:nth-child(odd){ background: var(--surface); }
+  td.tight, th.tight{ white-space:nowrap; }
+  .id-tag{ font-family:"IBM Plex Mono",monospace; font-size:12.5px; color:var(--accent-ink); font-weight:600; }
+
+  /* ---------- callouts ---------- */
+  .callout{
+    max-width: 74ch;
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    margin: 0 0 18px;
+    border: 1px solid var(--line);
+    font-size: 14.5px;
+    line-height:1.6;
+  }
+  .callout.principle{ background: var(--accent-bg); border-color: color-mix(in srgb, var(--accent) 35%, var(--line)); }
+  .callout.gap{ background: var(--accent-2-bg); border-color: color-mix(in srgb, var(--accent-2) 35%, var(--line)); }
+  .callout .co-label{
+    font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:0.1em; text-transform:uppercase;
+    display:block; margin-bottom:6px;
+  }
+  .callout.principle .co-label{ color: var(--accent-ink); }
+  .callout.gap .co-label{ color: var(--accent-2); }
+  .callout p{ margin:0; max-width:none; color:var(--ink); }
+  .callout p + p{ margin-top:8px; }
+
+  .goal-box{
+    max-width:74ch;
+    border: 1.5px dashed var(--line-strong);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    background: var(--surface);
+    margin-bottom: 18px;
+    box-shadow: var(--shadow);
+  }
+  .goal-box .co-label{ font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-faint); display:block; margin-bottom:8px;}
+  .goal-box p{ font-family:"Fraunces",serif; font-size:19px; font-weight:500; font-style:italic; margin:0; max-width:none; color:var(--ink); }
+
+  /* open questions */
+  .oq-list{ list-style:none; margin:0; padding:0; max-width:74ch; counter-reset: oq; }
+  .oq-list li{
+    counter-increment: oq;
+    border: 1px dashed var(--line-strong);
+    border-radius: var(--radius);
+    padding: 12px 16px 12px 46px;
+    margin-bottom: 10px;
+    position: relative;
+    background: var(--surface);
+    font-size: 14.5px;
+    line-height:1.55;
+  }
+  .oq-list li::before{
+    content: "Q" counter(oq);
+    position:absolute; left:14px; top:12px;
+    font-family:"IBM Plex Mono",monospace; font-weight:600; font-size:12px;
+    color: var(--accent-2);
+  }
+
+  footer.doc-footer{
+    grid-column: 1/-1;
+    border-top:1px solid var(--line);
+    padding-top:20px; margin-top:8px;
+    font-size:12.5px; color:var(--ink-faint);
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;
+  }
+</style>
+
+<div class="shell">
+  <header class="masthead">
+    <span class="eyebrow">Product Requirements Document</span>
+    <h1>Talenesia Unified Data Platform</h1>
+    <p class="dek">Integrating sales, admissions, learning, and finance data across the student journey — from the first sales lead to graduation and job placement.</p>
+    <div class="meta-row">
+      <div><span class="k">Prepared for</span><span class="v">Prospective engineering hires / engineering team</span></div>
+      <div><span class="k">Product owner</span><span class="v">Chief Learning Officer (CLO), Talenesia</span></div>
+      <div><span class="k">Status</span><span class="v">Draft v1 — open questions in §13</span></div>
+      <div><span class="k">Scope</span><span class="v">Lead acquisition → graduation, full data lifecycle</span></div>
+    </div>
+  </header>
+
+  <div class="stats">
+    <div class="stat"><span class="num">9</span><span class="lbl">journey phases, lead to graduate</span></div>
+    <div class="stat"><span class="num">150–160</span><span class="lbl">students per batch</span></div>
+    <div class="stat"><span class="num">3</span><span class="lbl">batches running concurrently</span></div>
+    <div class="stat"><span class="num">~480</span><span class="lbl">students active at once</span></div>
+    <div class="stat"><span class="num">~16</span><span class="lbl">core internal staff</span></div>
+    <div class="stat"><span class="num">~100</span><span class="lbl">contracted mentors / tutors / SMEs</span></div>
+  </div>
+
+  <details class="mobile-toc">
+    <summary>Table of contents</summary>
+    <ol>
+      <li><a href="#s1">Executive Summary</a></li>
+      <li><a href="#s2">Background &amp; Context</a></li>
+      <li><a href="#s3">Problem Statement</a></li>
+      <li><a href="#s4">Goals &amp; Success Metrics</a></li>
+      <li><a href="#s5">Non-Goals</a></li>
+      <li><a href="#s6">Stakeholders</a></li>
+      <li><a href="#s7">Current State</a></li>
+      <li><a href="#s8">Requirements</a></li>
+      <li><a href="#s9">Technical Considerations</a></li>
+      <li><a href="#s10">Design Principles</a></li>
+      <li><a href="#s11">Risks &amp; Mitigations</a></li>
+      <li><a href="#s12">Timeline</a></li>
+      <li><a href="#s13">Open Questions</a></li>
+      <li><a href="#s14">Appendix</a></li>
+    </ol>
+  </details>
+
+  <nav class="rail">
+    <div class="rail-title">Contents</div>
+    <ol>
+      <li><a href="#s1">Executive Summary</a></li>
+      <li><a href="#s2">Background &amp; Context</a></li>
+      <li><a href="#s3">Problem Statement</a></li>
+      <li><a href="#s4">Goals &amp; Success Metrics</a></li>
+      <li><a href="#s5">Non-Goals</a></li>
+      <li><a href="#s6">Stakeholders</a></li>
+      <li><a href="#s7">Current State</a></li>
+      <li><a href="#s8">Requirements</a></li>
+      <li><a href="#s9">Technical Considerations</a></li>
+      <li><a href="#s10">Design Principles</a></li>
+      <li><a href="#s11">Risks &amp; Mitigations</a></li>
+      <li><a href="#s12">Timeline</a></li>
+      <li><a href="#s13">Open Questions</a></li>
+      <li><a href="#s14">Appendix</a></li>
+    </ol>
+  </nav>
+
+  <main>
+
+    <section id="s1">
+      <div class="sec-head"><span class="sn">01</span><h2>Executive Summary</h2></div>
+      <p>Talenesia runs a paid, cohort-based professional training program ("KSDK") that takes a student from first contact as a sales lead through a nine-month journey to graduation and job placement. Today, the data describing that journey is scattered across a real CRM, a real payment gateway, a real LMS, and a long tail of independently maintained Google Sheets — connected almost entirely by manual copy-paste. This PRD asks the engineering team being hired to build a single, properly structured backend that integrates this data, fronted by an interface simple enough for non-technical staff to actually use daily.</p>
+      <p>Two prior attempts to solve this — an ERP build and an AI-based platform — were not adopted. Their failure modes are treated as first-class requirements here, not footnotes: the ERP added a tool without removing any existing burden, and the AI platform was API plumbing without real data grounding. Any proposal that repeats either pattern should be rejected during review, regardless of technical merit.</p>
+      <div class="goal-box">
+        <span class="co-label">Target outcome, stated by the CLO</span>
+        <p>"Data is reconciled and connected across platforms within 6 months of engagement start."</p>
+      </div>
+    </section>
+
+    <section id="s2">
+      <div class="sec-head"><span class="sn">02</span><h2>Background &amp; Business Context</h2></div>
+      <p>Talenesia's program, internally called KSDK, involves three roles across the journey: the student/customer; the Sales team (Education Consultants, "EC"); and Educators, split into Mentor, Tutor, and SME sub-roles. The journey runs nine sequential phases (§7), plus supporting processes that cut across phases — payment relief, batch changes, post-course billing, a cross-functional reconciliation process, and contractor payroll for the educator pool.</p>
+      <h3>Organization &amp; team shape</h3>
+      <p>Roughly 16 core internal staff and a pool of about 100 contracted educators interact with this data pipeline:</p>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Function</th><th>Headcount</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>Sales</td><td class="tight">1 manager, 2–3 sales force, 1 sales data admin</td><td>Owns Phase 1 (lead acquisition) in Qontak</td></tr>
+          <tr><td>Business Development (BD)</td><td class="tight">1 manager, 2 staff</td><td>Classifies and manages industry partners for internship matchmaking (Phase 7)</td></tr>
+          <tr><td>Learning Operations (LOps)</td><td class="tight">1 coordinator, 2 staff</td><td>Owns onboarding and day-to-day academic operations (Phases 5–6)</td></tr>
+          <tr><td>Learning Program Manager / Educator Manager</td><td class="tight">3</td><td>Manages the Mentor/Tutor/SME pool</td></tr>
+          <tr><td>Data Analyst</td><td class="tight">TBD (de facto role)</td><td>Currently the unofficial manual integration point between systems — see §3</td></tr>
+          <tr><td>Finance</td><td class="tight">TBD</td><td>Owns AR reconciliation on paper; currently blocked by data quality (§3)</td></tr>
+          <tr><td>Chief Learning Officer (CLO)</td><td class="tight">1</td><td>Product owner for this engagement</td></tr>
+          <tr><td>CEO</td><td class="tight">1</td><td>—</td></tr>
+          <tr><td>HR Ops</td><td class="tight">1</td><td>Payroll</td></tr>
+          <tr><td>Mentor / Tutor / SME</td><td class="tight">~100 active</td><td>Freelance, contracted directly; paid monthly by service hours</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section id="s3">
+      <div class="sec-head"><span class="sn">03</span><h2>Problem Statement</h2></div>
+      <h3>3.1 &nbsp;Data is scattered and not interoperable</h3>
+      <p>Student, sales, finance, and learning data lives across a real CRM (Qontak), a real payment gateway (Paper.id), a real LMS (Moodle, replicated into Google Cloud/BigQuery), and a long tail of independent Google Sheets — one of which gets recreated by hand for every new batch, in every phase from work-simulation through job search. The connective tissue between all of it is manual import/export. This bites both across functions (sales → admission → finance → BD/matchmaking → mentors, each a manual handoff) and within functions (within Sales, the initial quotation and the final signed-contract quotation reconcile in different sheets; within Learning, per-batch dashboard fragmentation sits alongside Moodle data that lives separately again in BigQuery).</p>
+      <p>The clearest single piece of evidence is the <strong>"Master Rekonsiliasi Talenesia"</strong> spreadsheet — designed to be the shared reconciliation point across Sales, Finance, and Learning, with each team responsible for keeping their section current. In practice it is wired to nothing: not Paper.id, not the working dashboards. It depends entirely on manual discipline that doesn't happen consistently. As a result, Finance — whose actual job is AR reconciliation — cannot do it, and a Data Analyst has become the unofficial, fully manual integration layer between systems that should talk to each other automatically.</p>
+      <p>A persistent Student ID does already exist and correctly links the Sales Order, invoice, and certificate. The gap is enforcement, not design: staff can and do create new ad-hoc tracking spreadsheets — common in Phases 6–9, one per batch — without including the Student ID field, breaking the join back to the rest of the record.</p>
+      <h3>3.2 &nbsp;Two prior fixes were not adopted</h3>
+      <p>An ERP system and an AI-based platform were each built to address this problem. Neither is in active, team-wide use today. Root causes (detailed in §10) directly shape the requirements in this PRD: the ERP was rolled out in stages such that every stage required staff to keep using all prior tools plus the ERP, producing pure overhead with no removed step; the AI platform connected API calls without the underlying data engineering needed to make its output reliable.</p>
+    </section>
+
+    <section id="s4">
+      <div class="sec-head"><span class="sn">04</span><h2>Goals &amp; Success Metrics</h2></div>
+      <p>The primary goal is stated in §1. It should be broken down jointly by the incoming engineering team and the CLO into concrete, checkable milestones during the first weeks of engagement. Candidate milestones to formalize:</p>
+      <ul>
+        <li>Each of the 9 journey phases has one live, batch-filterable system of truth — no more per-batch spreadsheet recreation.</li>
+        <li>The Student ID is structurally present in every tracking view the new system produces — impossible to omit, not just policy to remember.</li>
+        <li>Finance can perform AR reconciliation directly against the platform, without the Data Analyst manually bridging gaps between Paper.id and spreadsheets.</li>
+        <li>A new batch launch requires zero manually rebuilt dashboards.</li>
+        <li>Payment status changes in Paper.id are reflected in the platform without manual checking.</li>
+        <li>At least one full team (recommend Sales or LOps, §6) has fully retired its legacy spreadsheet workflow for daily use — evidence of real adoption, not tools run in parallel.</li>
+      </ul>
+    </section>
+
+    <section id="s5">
+      <div class="sec-head"><span class="sn">05</span><h2>Non-Goals / Out of Scope</h2></div>
+      <p>The following are explicitly out of scope for the initial engagement unless the open questions in §13 resolve otherwise:</p>
+      <ul>
+        <li>Replacing Qontak, Paper.id, or Moodle outright — the working assumption is that these remain systems of record for the teams that use them daily, integrated into rather than replaced by the new platform (to be explicitly confirmed — Q3).</li>
+        <li>Automating the contractor (mentor/tutor/SME) payroll calculation — status TBD (Q1).</li>
+        <li>Building new AI/LLM features as a first release. Given the prior AI-platform failure, any AI feature should be proposed only after the underlying data model is solid, and treated as a distinct, later initiative.</li>
+        <li>Migrating or recovering the prior ERP/AI-platform codebases as a hard requirement — worth investigating (Q5) but not to be assumed available.</li>
+      </ul>
+    </section>
+
+    <section id="s6">
+      <div class="sec-head"><span class="sn">06</span><h2>Stakeholders &amp; Users</h2></div>
+      <p>The primary users of the new platform are the non-technical, non-data-savvy staff who run the business day to day — Sales, BD, Learning Operations, Finance, and the Mentor/Tutor/SME pool — not the engineering team itself. This ordering matters: a technically correct backend that these teams do not use in place of their spreadsheets has not achieved the goal of this PRD.</p>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Stakeholder</th><th>Relationship to the platform</th></tr></thead>
+        <tbody>
+          <tr><td class="tight">CLO</td><td>Product owner; day-to-day decision-maker for scope calls</td></tr>
+          <tr><td class="tight">Sales / EC</td><td>Primary users of Phase 1–4 data (leads, quotations, orders, payments)</td></tr>
+          <tr><td class="tight">BD</td><td>Primary users of Phase 7 data (industry partner classification, matchmaking)</td></tr>
+          <tr><td class="tight">Learning Operations</td><td>Primary users of Phase 5–6 data (onboarding, work-simulation tracking)</td></tr>
+          <tr><td class="tight">Finance</td><td>Consumer of reconciled payment/AR data; currently blocked, see §3</td></tr>
+          <tr><td class="tight">Data Analyst</td><td>Likely key technical collaborator; current de facto manual integration owner</td></tr>
+          <tr><td class="tight">Mentors / Tutors / SMEs (~100)</td><td>Contributors of grading/mentoring data; contractor payroll inputs</td></tr>
+          <tr><td class="tight">Students</td><td>Subjects of the data; end users of the student dashboard and Paper.id</td></tr>
+          <tr><td class="tight">Industry partners</td><td>External stakeholders in Phase 7–8 matchmaking and internship data</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section id="s7">
+      <div class="sec-head"><span class="sn">07</span><h2>Current State — As-Is Process</h2></div>
+      <p>The KSDK student journey runs nine sequential phases. The table below is the primary reference for the engineering team on what data exists today, and where.</p>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th style="width:16%">Phase</th><th>What happens</th><th style="width:22%">Current system of record</th></tr></thead>
+        <tbody>
+          <tr><td><span class="id-tag">1</span> Lead acquisition &amp; sales</td><td>Leads arrive via website, social, ads (unique link per channel/post/campaign), events, Instagram DM, media partners/KOL, each with a unique lead ID. EC works the lead, ideally logs hot leads into CRM, issues a quotation. Accept → Sales Order approved; reject → alternate payment scheme offered (new Product ID); still reject → ends.</td><td>Qontak (CRM)</td></tr>
+          <tr><td><span class="id-tag">2</span> Admission</td><td>Demographic data + cognitive test. Fail → 1 retake; still fail → check alternate-major passing grade → offer or end. Pass → book career-guidance slot + mentor assignment.</td><td>Mastersheet Admission (Sheet)</td></tr>
+          <tr><td><span class="id-tag">3</span> Career guidance / bimkar</td><td>Mentor runs session, files report, sets final major + package. Cooperation agreement (PKS) generated and signed. Disagreement on final quotation loops back; agreement proceeds to payment.</td><td>Google Form response sheet</td></tr>
+          <tr><td><span class="id-tag">4</span> Payment &amp; registration</td><td>Invoice generated, 1st payment via Paper.id. Student dashboard signup. Payment/status tracked (DG/UG/Selesai). Special flows: batch deferral; full refund with forfeited registration fee on post-payment cognitive-test failure.</td><td>"DATA MASTER SALES" + Paper.id</td></tr>
+          <tr><td><span class="id-tag">5</span> Onboarding</td><td>WhatsApp group → pre-onboarding session → LMS access → auto-grouped into squad/mentor/tutorial group → mentor coordinator assigned → schedule and journey info shared.</td><td>Manual / WhatsApp-based</td></tr>
+          <tr><td><span class="id-tag">6</span> Work-simulation classes</td><td>7 projects, each with class + tutoring cycles (attendance tracked), case studies, group tutoring/mentoring, monthly 1:1 mentoring, graded mini-projects. After project 1, students are placed into 4 groups (A–D) for internship placement using scores, softskills, CV, timeliness, and economic condition.</td><td>Separate dashboard per batch; grades in Moodle → BigQuery</td></tr>
+          <tr><td><span class="id-tag">7</span> Internship matchmaking</td><td>3 rounds. Industry partners classified A–D by BD. Round 1: tier-matched. Round 2: unmatched opened to all. Round 3: remaining students manually placed by Talenesia. Accepted → partner issues contract, onboarding with student + mentor + partner.</td><td>Per-batch matchmaking master sheet</td></tr>
+          <tr><td><span class="id-tag">8</span> Internship</td><td>Month 1: journal, mentor monitoring, feedback, innovation project, 1st-month evaluation, IDP. Month 2: async feedback + project work. Final: presentation, grading, report card, certificate, competency list.</td><td>Per-batch monitoring dashboard (.xlsx)</td></tr>
+          <tr><td><span class="id-tag">9</span> Job search</td><td>Student selects a job-search package. "Guarantee" package: full support until placement, or downgrade on rule violation; placement restructures remaining installments. Non-guarantee: program ends after internship.</td><td>Per-batch job-search dashboard</td></tr>
+        </tbody>
+      </table></div>
+      <h3>7.1 &nbsp;Supporting (cross-cutting) processes</h3>
+      <ul>
+        <li><strong>Payment relief</strong> — tenor extension, deferral to "T-Later," or installment freeze (if eligible); simulation generated, and if approved the contract is amended and the invoice adjusted.</li>
+        <li><strong>Downgrade / upgrade / batch deferral</strong> — Sales manually edits the Sales Order bundle and pushes updates to the accounting system and Paper.id by hand.</li>
+        <li><strong>Post-course billing</strong> — remaining installments after program end are auto-invoiced via Paper.id; non-payment results in access being cut off.</li>
+        <li><strong>Master reconciliation</strong> — see §3.1; currently broken.</li>
+        <li><strong>Contractor payroll</strong> — ~100 active mentors/tutors/SMEs paid monthly by service hours, calculated from a tracking sheet against a separate fee-calculation sheet (scope TBD, Q1).</li>
+      </ul>
+    </section>
+
+    <section id="s8">
+      <div class="sec-head"><span class="sn">08</span><h2>Requirements</h2></div>
+      <h3>8.1 &nbsp;Functional requirements</h3>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th style="width:70px">ID</th><th>Requirement</th></tr></thead>
+        <tbody>
+          <tr><td class="id-tag">FR-1</td><td>Maintain a single student record keyed by the existing persistent Student ID, present and enforced across every phase artifact — admission, work-simulation, matchmaking, internship, job search — so it cannot be structurally omitted from a new tracking view the way it can be today.</td></tr>
+          <tr><td class="id-tag">FR-2</td><td>Replace all per-batch spreadsheets (Phases 6–9) with one system whose views are filtered by batch, eliminating manual dashboard recreation at every batch launch.</td></tr>
+          <tr><td class="id-tag">FR-3</td><td>Integrate with Qontak, Paper.id, and Moodle/BigQuery via their APIs to pull data automatically into a central, properly modeled warehouse, replacing manual export/import.</td></tr>
+          <tr><td class="id-tag">FR-4</td><td>Provide a live, automatically updated Master Reconciliation view spanning sales, finance, and learning data, replacing the manually maintained "Master Rekonsiliasi Talenesia" spreadsheet.</td></tr>
+          <tr><td class="id-tag">FR-5</td><td>Synchronize payment/invoice status from Paper.id into the platform, reconciled defensively against Paper.id's API rather than trusting webhook callbacks alone (§9.1).</td></tr>
+          <tr><td class="id-tag">FR-6</td><td>Provide role-scoped views for each function (Sales, BD, LOps, Finance, CLO) showing only the data and actions relevant to that role.</td></tr>
+          <tr><td class="id-tag">FR-7</td><td>Capture structured consent at lead intake across all inbound channels, including channels with no consent moment today (e.g. Instagram DM, KOL links).</td></tr>
+          <tr><td class="id-tag">FR-8</td><td>Support data-subject export and deletion requests for student and mentor personal data.</td></tr>
+          <tr><td class="id-tag">FR-9</td><td>Log access to and edits of sensitive fields (cognitive test scores, economic condition, financial/payment data) for audit purposes.</td></tr>
+          <tr><td class="id-tag">FR-10</td><td>(Scope TBD) Support the contractor payroll calculation — service hours to monthly fee — for the mentor/tutor/SME pool, pending Q1.</td></tr>
+        </tbody>
+      </table></div>
+      <h3>8.2 &nbsp;Non-functional requirements</h3>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th style="width:70px">ID</th><th>Requirement</th></tr></thead>
+        <tbody>
+          <tr><td class="id-tag">NFR-1</td><td>Adoption over completeness: every release must let at least one team stop using an existing tool or spreadsheet, not merely add a new one — directly addressing the ERP's failure mode (§10).</td></tr>
+          <tr><td class="id-tag">NFR-2</td><td>Scale for roughly 450–480 concurrently active students (3 concurrent batches of 150–160) and ~100 contractors. A data-modeling and workflow-integration problem, not a big-data one — don't over-engineer for volume that doesn't exist.</td></tr>
+          <tr><td class="id-tag">NFR-3</td><td>Encrypt sensitive fields at rest (test scores, economic condition, financial data, national ID) and enforce role-based access control per function.</td></tr>
+          <tr><td class="id-tag">NFR-4</td><td>Architect for Indonesian data-protection law (UU PDP) compliance readiness from day one — not bolted on later. See §9.2.</td></tr>
+          <tr><td class="id-tag">NFR-5</td><td>Treat all Paper.id webhook payloads as untrusted and reconcile state changes against Paper.id's own API, given the lack of documented webhook signature verification (§9.1).</td></tr>
+          <tr><td class="id-tag">NFR-6</td><td>All code and infrastructure must live in Talenesia-owned accounts (this GitHub organization, Talenesia-owned cloud accounts) from day one — no personal-account dependencies, given the access-loss risk described in §10.</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section id="s9">
+      <div class="sec-head"><span class="sn">09</span><h2>Technical Considerations &amp; Constraints</h2></div>
+      <h3>9.1 &nbsp;Payment integration — Paper.id</h3>
+      <p>A full API reference has already been compiled and committed to this repository at <span class="mono">platform/tooling/api/paperid_payment/</span>. Key findings:</p>
+      <ul>
+        <li>Authentication is a static <span class="mono">client_id</span>/<span class="mono">client_secret</span> header pair (no OAuth) — straightforward to integrate, but the keys are the entire security boundary and require careful secrets management.</li>
+        <li>A staging environment exists with no KYC requirement and a payment-simulation endpoint, safe to build and test against before production.</li>
+        <li>Endpoints exist to automate what is manual today: Sales Invoice creation/status, Partner (customer) sync, balance/withdrawal, and post-course billing.</li>
+      </ul>
+      <div class="callout gap">
+        <span class="co-label">Known gap</span>
+        <p><strong>Paper.id's webhooks (Payment In, Payment Out, Invoice Paid, Disbursement) have no documented signature verification.</strong> Any real-time payment-status sync must treat webhook payloads as untrusted and reconcile against Paper.id's own API rather than trusting callbacks blindly. Recommend raising this directly with Paper.id support before relying on webhooks for state changes.</p>
+      </div>
+
+      <h3>9.2 &nbsp;Regulatory constraints — Indonesia's UU PDP</h3>
+      <p>Full research has been compiled and committed to this repository at <span class="mono">platform/docs/compliance/indonesia-data-protection-uu-pdp.md</span>. This is research from public sources, not a legal opinion, and must be reviewed by qualified Indonesian counsel before being treated as final. Key findings:</p>
+      <ul>
+        <li>Talenesia is a Data Controller under UU PDP (Law 27/2022) for student, lead, and mentor data.</li>
+        <li>"Kondisi ekonomi" (economic condition) data is explicitly classified as sensitive personal data under the law. Cognitive test scores should be treated as sensitive out of caution, given they drive admission decisions.</li>
+        <li>A 2025 Constitutional Court ruling likely means Talenesia crosses the threshold requiring appointment of a Data Protection Officer, given the scale of sensitive data processed.</li>
+        <li>Cross-border data transfer is a live, unresolved question: Moodle data replicates to Google Cloud/BigQuery, and the team needs to confirm the dataset's region and that Google's Data Processing Addendum is executed.</li>
+      </ul>
+      <div class="callout gap">
+        <span class="co-label">Known gap</span>
+        <p>Breach notification carries a <strong>3×24-hour window</strong> — the current all-manual, multi-spreadsheet state cannot realistically meet this, which is itself an argument for prioritizing this platform.</p>
+      </div>
+      <p>Practical build-in requirements (reflected in FR-7, FR-8, FR-9, NFR-3, NFR-4): data-subject deletion/export capability, encryption plus role-based access control plus audit logging for sensitive fields, and structured consent capture at lead intake.</p>
+
+      <h3>9.3 &nbsp;Proposed solution shape</h3>
+      <p>Based on the requirements above: one properly structured backend/data warehouse integrating all journey data, fronted by an interface simple enough for non-technical staff to adopt in place of their current tools.</p>
+      <ul>
+        <li>Qontak, Paper.id, and Moodle likely remain systems of record for the teams that work in them daily — the new layer integrates via API rather than replacing what already works. <em>(To be explicitly confirmed — Q3.)</em></li>
+        <li>Every phase-specific tracking artifact is replaced by one system, filtered by batch, not recreated by hand each cohort.</li>
+        <li>The Student ID becomes structurally impossible to omit, because the new system is the only sanctioned place to create a tracking view.</li>
+        <li>The Master Reconciliation becomes a live, automatically updating view rather than a manually maintained spreadsheet, directly unblocking Finance's AR reconciliation work.</li>
+        <li>Front-end direction (spreadsheet-like for a gentler transition, vs. a guided form-based app that more directly addresses the discipline problem) is left for the incoming engineer to propose explicitly rather than assume — see Q4.</li>
+      </ul>
+    </section>
+
+    <section id="s10">
+      <div class="sec-head"><span class="sn">10</span><h2>Design Principles — Lessons from Prior Failures</h2></div>
+      <p>Two prior initiatives were not adopted. Their root causes are treated as binding design constraints for this engagement, not historical trivia.</p>
+
+      <h3>10.1 &nbsp;The ERP: staged rollout without removing burden</h3>
+      <p>The ERP was launched in stages. At every stage, staff had to keep using all their existing tools plus the ERP — pure overhead, with no step removed and no visible benefit. It was too complex to adopt on top of an already-fragmented toolset.</p>
+      <div class="callout principle">
+        <span class="co-label">Design principle</span>
+        <p>Any new system component must <strong>replace and reduce</strong> the number of tools/steps for at least one team from day one. A staged rollout is acceptable, but each stage must retire something, not just add something. If a phase's rollout doesn't let someone stop using a spreadsheet, it hasn't shipped anything real yet.</p>
+      </div>
+
+      <h3>10.2 &nbsp;The AI platform: API plumbing without data grounding</h3>
+      <p>The engineer connected API calls to a model but never did the work of grounding the system in Talenesia's real data — proper schema, context, and either retrieval-augmented generation or fine-tuning — so it could not reliably produce the answers the team needed.</p>
+      <div class="callout principle">
+        <span class="co-label">Design principle</span>
+        <p>An AI feature is a <strong>data-engineering project first, an API call second.</strong> Whoever builds it must own getting the underlying data clean, structured, and correctly modeled before wiring any model to it. This engagement should not be staffed for API-integration skills alone if AI features are ever in scope.</p>
+      </div>
+
+      <h3>10.3 &nbsp;General lesson: adoption is the metric</h3>
+      <p>Talenesia's non-technical, non-data-savvy staff — Sales, BD, LOps, mentors — are the actual daily users of whatever is built. A technically correct backend that they do not use is worthless. The front end must be evaluated primarily on adoption, not feature completeness.</p>
+
+      <h3>10.4 &nbsp;Operational risk: repository and access ownership</h3>
+      <p>A previous engineer did not share GitHub access to prior work, so the recoverability of past ERP/AI-platform code and infrastructure is uncertain. This repository (<span class="mono">techteam-talenesia/systemenhancement</span>) is itself the fix: all engineering work for this effort must live here, in a Talenesia-owned account, from day one, with no exceptions.</p>
+    </section>
+
+    <section id="s11">
+      <div class="sec-head"><span class="sn">11</span><h2>Risks &amp; Mitigations</h2></div>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th style="width:36%">Risk</th><th>Mitigation</th></tr></thead>
+        <tbody>
+          <tr><td>Repeating the ERP failure mode — a new tool added without removing burden</td><td>Enforce NFR-1: every release must retire a spreadsheet or manual step for at least one team, verified before sign-off.</td></tr>
+          <tr><td>Repeating the AI-platform failure mode — ungrounded AI features</td><td>Require solid data modeling and grounding before any AI feature is proposed; treat as a distinct, later initiative (§5).</td></tr>
+          <tr><td>Paper.id webhook spoofing or unverified payloads</td><td>Reconcile all payment-state changes against Paper.id's API rather than trusting webhook callbacks alone (NFR-5); raise the signature-verification gap with Paper.id support.</td></tr>
+          <tr><td>UU PDP non-compliance — fines, breach exposure, unmet 3×24-hour notification window</td><td>Legal review by Indonesian counsel; build consent, deletion/export, encryption, RBAC, and audit logging in from day one (§9.2); evaluate DPO appointment.</td></tr>
+          <tr><td>Loss of prior engineering assets due to access lock-out</td><td>Mandate all new work in this Talenesia-owned repository (already in place); separately attempt recovery of prior GitHub access (Q5).</td></tr>
+          <tr><td>Low staff adoption due to interface complexity</td><td>Prioritize UX simplicity; pilot with one team or one batch before full rollout; gather continuous feedback against the adoption metric in NFR-1.</td></tr>
+          <tr><td>Governance gap re-emerges — new ad hoc spreadsheets bypass the platform</td><td>Make the new system the only sanctioned place to create a tracking view; enforce the Student ID as a structurally required field (FR-1).</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section id="s12">
+      <div class="sec-head"><span class="sn">12</span><h2>Timeline</h2></div>
+      <p>Target: data reconciled and connected across platforms within 6 months of engagement start (§4). A detailed phase-by-phase delivery plan, milestone dates, and hiring budget/timeline are pending — see Q1 and Q2. Recommend the incoming engineering team propose a phased delivery plan within the first two weeks of engagement, sequenced against the milestones in §4.</p>
+    </section>
+
+    <section id="s13">
+      <div class="sec-head"><span class="sn">13</span><h2>Open Questions</h2></div>
+      <p>These require answers before or during the engineering engagement. They are listed explicitly rather than assumed away.</p>
+      <ol class="oq-list">
+        <li>Contractor payroll — is the mentor/tutor/SME fee-calculation process (service hours → monthly pay) in scope for this engineering effort, or a separate/later initiative?</li>
+        <li>Budget and timeline for this hire — even a rough range, to calibrate ambition (a warehouse plus one integration is a very different engagement than warehouse plus integrations plus a new front end).</li>
+        <li>Front-end UX direction — spreadsheet-like (gentler adoption curve) vs. guided/form-based app (addresses the discipline problem more directly)? Recommend the incoming engineer propose this rather than assume it.</li>
+        <li>Qontak CRM compliance — is "EC ideally logs hot leads into Qontak" actually followed, or are leads slipping through when EC skips CRM entry? Needs verification with the Sales team directly.</li>
+        <li>Reusable assets — is any part of the prior ERP or AI-platform build (infrastructure, schema, data) recoverable, given the access issue with the previous engineer? Should be checked before assuming a fully greenfield build.</li>
+        <li>Data Analyst's role going forward — headcount, reporting line, and current tooling (manual spreadsheet work vs. real SQL/BigQuery/scripting capability). Likely a key internal collaborator for whoever is hired.</li>
+      </ol>
+    </section>
+
+    <section id="s14">
+      <div class="sec-head"><span class="sn">14</span><h2>Appendix / References</h2></div>
+      <p>Source materials, all in the repository <span class="mono">techteam-talenesia/systemenhancement</span>, branch <span class="mono">claude/talenesia-process-brief-2qsfmi</span> unless noted:</p>
+      <ul>
+        <li>Original process source: "Business Process Program KSDK" document, provided by the CLO.</li>
+        <li><span class="mono">platform/docs/business-process-brief.md</span> — the source engineering brief this PRD is derived from, with additional narrative detail.</li>
+        <li><span class="mono">platform/tooling/api/paperid_payment/</span> — full Paper.id Open API reference (authentication, invoices, payments, webhooks, partners, errors, reference data).</li>
+        <li><span class="mono">platform/docs/compliance/indonesia-data-protection-uu-pdp.md</span> — Indonesian data protection law (UU PDP) research.</li>
+      </ul>
+      <p>Data landscape sources named in the stakeholder interview but not directly inspected (private/authenticated Google Sheets and BigQuery projects): Qontak, acquisition sheet, Mastersheet Admission, DATA MASTER SALES, per-batch work-simulation/matchmaking/internship/job-search dashboards, Master Rekonsiliasi Talenesia, mentor roster and fee-calculation sheets, and Moodle's <span class="mono">moodle-raw-data</span> BigQuery project. Structural details for these were relayed verbally by the CLO rather than inspected directly by this document's author.</p>
+    </section>
+
+  </main>
+
+  <footer class="doc-footer">
+    <span>Talenesia Unified Data Platform — PRD v1</span>
+    <span>techteam-talenesia/systemenhancement</span>
+  </footer>
+</div>
