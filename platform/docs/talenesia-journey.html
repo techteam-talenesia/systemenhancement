@@ -1,0 +1,667 @@
+<title>Talenesia Student Journey</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #F1F3F1;
+    --surface: #FFFFFF;
+    --surface-2: #E9EDEA;
+    --ink: #16232E;
+    --ink-muted: #52626B;
+    --ink-faint: #7C8A85;
+    --accent: #1F6F6B;
+    --accent-ink: #0F4744;
+    --accent-2: #A6591E;
+    --accent-2-bg: #FBF0E4;
+    --accent-bg: #E7F1EF;
+    --line: #D8DED9;
+    --line-strong: #B7C3BC;
+    --shadow: 0 1px 2px rgba(15,40,35,0.06), 0 8px 24px -12px rgba(15,40,35,0.12);
+    --radius: 10px;
+
+    --role-customer: #B54B5C;
+    --role-customer-bg: #FBEAEC;
+    --role-educator: #1F6F6B;
+    --role-educator-bg: #E7F1EF;
+    --role-sales: #33569C;
+    --role-sales-bg: #E9EDF7;
+    --role-finance: #7A4F8C;
+    --role-finance-bg: #F2EAF5;
+    --role-lops: #8A6D16;
+    --role-lops-bg: #F6F0DF;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg: #0F1613; --surface: #161F1B; --surface-2: #1D2822;
+      --ink: #E7EDE9; --ink-muted: #9FB0A6; --ink-faint: #6F7F77;
+      --accent: #5AC4BC; --accent-ink: #CFF2EE;
+      --accent-2: #E0954D; --accent-2-bg: #2B2119;
+      --accent-bg: #16302C; --line: #2A362F; --line-strong: #3C4A41;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
+
+      --role-customer: #E0899A; --role-customer-bg: #2E1A1E;
+      --role-educator: #5AC4BC; --role-educator-bg: #16302C;
+      --role-sales: #93A9E0; --role-sales-bg: #1B2436;
+      --role-finance: #C6A8DA; --role-finance-bg: #271C2E;
+      --role-lops: #D4B65B; --role-lops-bg: #2C260F;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg: #0F1613; --surface: #161F1B; --surface-2: #1D2822;
+    --ink: #E7EDE9; --ink-muted: #9FB0A6; --ink-faint: #6F7F77;
+    --accent: #5AC4BC; --accent-ink: #CFF2EE;
+    --accent-2: #E0954D; --accent-2-bg: #2B2119;
+    --accent-bg: #16302C; --line: #2A362F; --line-strong: #3C4A41;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
+
+    --role-customer: #E0899A; --role-customer-bg: #2E1A1E;
+    --role-educator: #5AC4BC; --role-educator-bg: #16302C;
+    --role-sales: #93A9E0; --role-sales-bg: #1B2436;
+    --role-finance: #C6A8DA; --role-finance-bg: #271C2E;
+    --role-lops: #D4B65B; --role-lops-bg: #2C260F;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    background: var(--bg); color: var(--ink);
+    font-family: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+    padding-block: env(safe-area-inset-top, 0px) 64px;
+  }
+  h1,h2,h3{ font-family:"Fraunces",Georgia,serif; font-weight:600; text-wrap:balance; color:var(--ink); letter-spacing:-0.01em; }
+  .mono{ font-family:"IBM Plex Mono", ui-monospace, monospace; }
+
+  .shell{ max-width:1180px; margin:0 auto; padding-inline:20px; }
+
+  .masthead{ padding-block:40px 26px; border-bottom:1px solid var(--line-strong); margin-bottom:28px; }
+  .eyebrow{
+    font-family:"IBM Plex Mono",monospace; font-size:12.5px; letter-spacing:0.14em; text-transform:uppercase;
+    color:var(--accent-ink); background:var(--accent-bg); display:inline-block; padding:4px 10px; border-radius:999px; margin-bottom:18px;
+  }
+  .masthead h1{ font-size:clamp(28px,5vw,44px); line-height:1.08; margin:0 0 12px; }
+  .masthead .dek{ font-size:16.5px; color:var(--ink-muted); max-width:66ch; line-height:1.55; margin:0; }
+
+  /* role legend */
+  .legend{ display:flex; flex-wrap:wrap; gap:8px 10px; margin-top:22px; }
+  .chip{
+    display:inline-flex; align-items:center; gap:6px;
+    font-size:12.5px; font-weight:600; padding:5px 11px; border-radius:999px;
+    border:1px solid transparent;
+  }
+  .chip .dot{ width:8px; height:8px; border-radius:50%; flex:none; }
+  .chip.customer{ background:var(--role-customer-bg); color:var(--role-customer); }
+  .chip.customer .dot{ background:var(--role-customer); }
+  .chip.educator{ background:var(--role-educator-bg); color:var(--role-educator); }
+  .chip.educator .dot{ background:var(--role-educator); }
+  .chip.sales{ background:var(--role-sales-bg); color:var(--role-sales); }
+  .chip.sales .dot{ background:var(--role-sales); }
+  .chip.finance{ background:var(--role-finance-bg); color:var(--role-finance); }
+  .chip.finance .dot{ background:var(--role-finance); }
+  .chip.lops{ background:var(--role-lops-bg); color:var(--role-lops); }
+  .chip.lops .dot{ background:var(--role-lops); }
+  .chip.other{ background:var(--surface-2); color:var(--ink-faint); }
+  .chip.other .dot{ background:var(--ink-faint); }
+
+  main{ padding-bottom:40px; }
+  section{ margin-bottom:46px; scroll-margin-top:20px; }
+  section > .sec-head{ display:flex; align-items:baseline; gap:12px; border-bottom:1px solid var(--line); padding-bottom:10px; margin-bottom:18px; }
+  section > .sec-head .sn{ font-family:"IBM Plex Mono",monospace; color:var(--ink-faint); font-size:15px; }
+  section > .sec-head h2{ font-size:23px; margin:0; }
+  p{ line-height:1.65; color:var(--ink); max-width:76ch; margin:0 0 14px; font-size:15.5px; }
+
+  /* ---- overview swimlane table ---- */
+  .tbl-wrap{ overflow-x:auto; border:1px solid var(--line); border-radius:var(--radius); margin-bottom:14px; }
+  table.swim{ border-collapse:collapse; width:100%; min-width:920px; font-size:13px; }
+  table.swim caption{ display:none; }
+  table.swim th, table.swim td{ border:1px solid var(--line); padding:9px 10px; vertical-align:top; }
+  table.swim thead th{
+    background:var(--ink); color:var(--bg); font-family:"IBM Plex Mono",monospace; font-weight:600;
+    font-size:11px; letter-spacing:0.03em; position:sticky; top:0;
+  }
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) table.swim thead th{ background:var(--surface-2); color:var(--accent-ink); } }
+  :root[data-theme="dark"] table.swim thead th{ background:var(--surface-2); color:var(--accent-ink); }
+  table.swim th.rowhead{
+    text-align:left; white-space:nowrap; font-weight:700; font-size:13px;
+    background:var(--surface-2);
+  }
+  table.swim td{ background:var(--surface); line-height:1.4; }
+  table.swim td.na{ color:var(--ink-faint); text-align:center; font-style:italic; background:var(--surface-2); }
+  table.swim td.primary{ border-left:3px solid var(--cell-color, var(--accent)); font-weight:600; }
+  table.swim td.secondary{ color:var(--ink-muted); }
+  tr.row-customer td.primary{ --cell-color: var(--role-customer); }
+  tr.row-educator td.primary{ --cell-color: var(--role-educator); }
+  tr.row-sales td.primary{ --cell-color: var(--role-sales); }
+  tr.row-finance td.primary{ --cell-color: var(--role-finance); }
+  tr.row-lops td.primary{ --cell-color: var(--role-lops); }
+  .legend-note{ font-size:12.5px; color:var(--ink-faint); margin:0 0 30px; }
+
+  /* ---- svg diagram ---- */
+  figure.diagram{ margin:0 0 8px; padding:18px 16px 10px; background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); }
+  figure.diagram svg{ max-width:100%; height:auto; display:block; color:var(--ink); }
+  figure.diagram figcaption{ font-size:12.5px; color:var(--ink-faint); margin-top:10px; text-align:center; }
+  .diagram-legend{ display:flex; gap:18px; flex-wrap:wrap; justify-content:center; font-size:12px; color:var(--ink-muted); margin:10px 0 30px; }
+  .diagram-legend span{ display:inline-flex; align-items:center; gap:6px; }
+  .diagram-legend i{ width:18px; height:2px; display:inline-block; }
+  .diagram-legend i.solid{ background:var(--accent); }
+  .diagram-legend i.dashed{ background: repeating-linear-gradient(90deg, var(--accent-2) 0 5px, transparent 5px 9px); }
+
+  /* ---- phase detail cards ---- */
+  .phase-card{
+    border:1px solid var(--line); border-radius:var(--radius); background:var(--surface);
+    padding:18px 20px; margin-bottom:16px; box-shadow:var(--shadow);
+  }
+  .phase-card .ph-head{ display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; margin-bottom:10px; }
+  .phase-card .ph-num{ font-family:"IBM Plex Mono",monospace; font-size:13px; color:var(--ink-faint); }
+  .phase-card h3{ font-size:18px; margin:0; color:var(--ink); }
+  .phase-card .roles{ display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px; }
+  .datagrid{ display:grid; grid-template-columns: 120px 1fr; gap:6px 14px; font-size:14px; margin-bottom:4px; }
+  @media (max-width:640px){ .datagrid{ grid-template-columns: 1fr; } .datagrid .dl{ margin-top:6px; } }
+  .datagrid .dl{ font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-faint); padding-top:2px; }
+  .datagrid .dv{ color:var(--ink); line-height:1.55; }
+  .pill{
+    display:inline-block; background:var(--surface-2); color:var(--ink); border:1px solid var(--line);
+    font-family:"IBM Plex Mono",monospace; font-size:12px; padding:1px 8px; border-radius:6px; margin:0 5px 5px 0;
+  }
+  .flow-list{ list-style:none; margin:0; padding:0; }
+  .flow-list li{ position:relative; padding-left:18px; margin-bottom:4px; line-height:1.5; }
+  .flow-list li::before{ content:"→"; position:absolute; left:0; color:var(--accent-ink); font-weight:600; }
+  .gapnote{
+    margin-top:12px; padding:10px 14px; border-radius:8px; background:var(--accent-2-bg);
+    border:1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line)); font-size:13.5px; line-height:1.5;
+  }
+  .gapnote b{ color:var(--accent-2); font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:0.08em; text-transform:uppercase; display:block; margin-bottom:4px; }
+  .attr-note{ font-size:12.5px; color:var(--ink-faint); font-style:italic; margin-top:8px; }
+
+  footer.doc-footer{ border-top:1px solid var(--line); padding-top:20px; margin-top:8px; font-size:12.5px; color:var(--ink-faint); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; }
+</style>
+
+<div class="shell">
+  <header class="masthead">
+    <span class="eyebrow">Data &amp; Process Map</span>
+    <h1>Talenesia Student Journey</h1>
+    <p class="dek">What data gets created, where it's stored, and where it flows (or fails to) at each step — mapped across the five roles who touch it: Customer, Educator, Sales, Finance, and Learning Operations &amp; Managers.</p>
+    <div class="legend">
+      <span class="chip customer"><span class="dot"></span>Customer</span>
+      <span class="chip educator"><span class="dot"></span>Educator</span>
+      <span class="chip sales"><span class="dot"></span>Sales team</span>
+      <span class="chip finance"><span class="dot"></span>Finance team</span>
+      <span class="chip lops"><span class="dot"></span>Learning Ops &amp; Managers</span>
+      <span class="chip other"><span class="dot"></span>Other (BD / Data Analyst / HR Ops — not one of the five, shown where they're the actual owner)</span>
+    </div>
+  </header>
+
+  <main>
+
+    <section id="overview">
+      <div class="sec-head"><span class="sn">01</span><h2>Journey at a glance</h2></div>
+      <p>Each cell is that role's action in that phase. A colored left border marks the <strong>primary</strong> actor for the step; plain text marks a secondary touch; a muted cell means that role has no direct role there.</p>
+      <div class="tbl-wrap">
+        <table class="swim">
+          <thead>
+            <tr>
+              <th class="rowhead">Role</th>
+              <th>1 · Lead &amp; sales</th>
+              <th>2 · Admission</th>
+              <th>3 · Bimkar</th>
+              <th>4 · Payment</th>
+              <th>5 · Onboarding</th>
+              <th>6 · Work-sim classes</th>
+              <th>7 · Matchmaking</th>
+              <th>8 · Internship</th>
+              <th>9 · Job search</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="row-customer">
+              <th class="rowhead">Customer</th>
+              <td class="primary">Receives quotation, accepts/declines SO</td>
+              <td class="primary">Sits cognitive test</td>
+              <td class="primary">Attends session, signs PKS</td>
+              <td class="primary">Pays via Paper.id, dashboard signup</td>
+              <td class="primary">Joins WA group + LMS</td>
+              <td class="primary">Attends classes, submits mini-projects</td>
+              <td class="primary">Applies to matched partners</td>
+              <td class="primary">Journal, project, final presentation</td>
+              <td class="primary">Job search, may get placed</td>
+            </tr>
+            <tr class="row-educator">
+              <th class="rowhead">Educator</th>
+              <td class="na">—</td>
+              <td class="secondary">Assigned as mentor for bimkar</td>
+              <td class="primary">Runs session, sets final package, writes report</td>
+              <td class="na">—</td>
+              <td class="secondary">Mentor coordinator assigned</td>
+              <td class="primary">Teaches, tutors, grades mini-projects</td>
+              <td class="secondary">Supports student through transition</td>
+              <td class="primary">Monitors journal, grades, writes IDP</td>
+              <td class="primary">Mentors job-search activity</td>
+            </tr>
+            <tr class="row-sales">
+              <th class="rowhead">Sales team</th>
+              <td class="primary">Owns lead, issues quotation, approves SO</td>
+              <td class="secondary">Coordinates test logistics*</td>
+              <td class="secondary">Issues final quotation</td>
+              <td class="primary">Enters bundle + scheme into SO</td>
+              <td class="na">—</td>
+              <td class="na">—</td>
+              <td class="na">—</td>
+              <td class="na">—</td>
+              <td class="secondary">Edits SO if package changes</td>
+            </tr>
+            <tr class="row-finance">
+              <th class="rowhead">Finance team</th>
+              <td class="na">—</td>
+              <td class="na">—</td>
+              <td class="na">—</td>
+              <td class="secondary">Should reconcile AR (blocked today — see gap)</td>
+              <td class="na">—</td>
+              <td class="na">—</td>
+              <td class="na">—</td>
+              <td class="na">—</td>
+              <td class="secondary">Restructures installments on placement</td>
+            </tr>
+            <tr class="row-lops">
+              <th class="rowhead">Learning Ops &amp; Managers</th>
+              <td class="na">—</td>
+              <td class="secondary">Owns admission process*</td>
+              <td class="na">—</td>
+              <td class="na">—</td>
+              <td class="primary">Groups into squad, assigns coordinator</td>
+              <td class="primary">Monitors progress, computes A–D grouping</td>
+              <td class="secondary">Tracks placement (BD owns partner side)</td>
+              <td class="secondary">Tracks via dashboard</td>
+              <td class="primary">Tracks progress, package rule enforcement</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="legend-note">* Admission ownership (Phase 2) isn't explicitly assigned in the source process — shown split across Sales and Learning Ops as a reasonable default; confirm with the CLO before treating as final.</p>
+    </section>
+
+    <section id="idflow">
+      <div class="sec-head"><span class="sn">02</span><h2>Where the Student ID actually flows</h2></div>
+      <p>The single most consequential mechanism in this journey: a persistent Student ID is created at Phase 1 and correctly threads through the financial chain (Sales Order → invoice → certificate). It breaks down structurally once per-batch spreadsheets take over from Phase 6 onward — not because the ID stops existing, but because nothing forces whoever creates that batch's sheet to include it.</p>
+      <figure class="diagram">
+        <svg viewBox="0 0 920 210" role="img" aria-label="Diagram showing the Student ID flowing reliably through phases 1 to 5 via solid arrows, then flowing through phases 6 to 9 via dashed arrows labeled 'ID not structurally enforced', because each of those phases uses a new per-batch spreadsheet.">
+          <defs>
+            <marker id="arrSolid" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/>
+            </marker>
+            <marker id="arrDash" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="var(--accent-2)"/>
+            </marker>
+          </defs>
+          <!-- baseline -->
+          <line x1="40" y1="70" x2="880" y2="70" stroke="var(--line)" stroke-width="1"/>
+          <!-- nodes 1-5 solid chain -->
+          <!-- positions: 1:60 2:170 3:280 4:390 5:500 6:610 7:700 8:790 9:880 -->
+          <g font-family="IBM Plex Mono, monospace" font-size="12" fill="currentColor">
+            <!-- solid arrows 1-2-3-4-5 -->
+            <line x1="78" y1="70" x2="150" y2="70" stroke="var(--accent)" stroke-width="2" marker-end="url(#arrSolid)"/>
+            <line x1="190" y1="70" x2="260" y2="70" stroke="var(--accent)" stroke-width="2" marker-end="url(#arrSolid)"/>
+            <line x1="300" y1="70" x2="370" y2="70" stroke="var(--accent)" stroke-width="2" marker-end="url(#arrSolid)"/>
+            <line x1="410" y1="70" x2="480" y2="70" stroke="var(--accent)" stroke-width="2" marker-end="url(#arrSolid)"/>
+            <!-- dashed arrows 5-6-7-8-9 -->
+            <line x1="520" y1="70" x2="590" y2="70" stroke="var(--accent-2)" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#arrDash)"/>
+            <line x1="630" y1="70" x2="680" y2="70" stroke="var(--accent-2)" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#arrDash)"/>
+            <line x1="720" y1="70" x2="770" y2="70" stroke="var(--accent-2)" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#arrDash)"/>
+            <line x1="810" y1="70" x2="860" y2="70" stroke="var(--accent-2)" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#arrDash)"/>
+          </g>
+          <!-- phase nodes -->
+          <g font-family="IBM Plex Sans, sans-serif">
+            <!-- node template repeated -->
+            <g>
+              <circle cx="60" cy="70" r="20" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
+              <text x="60" y="75" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor">1</text>
+              <text x="60" y="112" text-anchor="middle" font-size="11" fill="currentColor">Lead &amp; sales</text>
+              <text x="60" y="126" text-anchor="middle" font-size="10" fill="var(--ink-faint)">Qontak</text>
+            </g>
+            <g>
+              <circle cx="170" cy="70" r="20" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
+              <text x="170" y="75" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor">2</text>
+              <text x="170" y="112" text-anchor="middle" font-size="11" fill="currentColor">Admission</text>
+              <text x="170" y="126" text-anchor="middle" font-size="10" fill="var(--ink-faint)">Mastersheet</text>
+            </g>
+            <g>
+              <circle cx="280" cy="70" r="20" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
+              <text x="280" y="75" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor">3</text>
+              <text x="280" y="112" text-anchor="middle" font-size="11" fill="currentColor">Bimkar</text>
+              <text x="280" y="126" text-anchor="middle" font-size="10" fill="var(--ink-faint)">Form sheet</text>
+            </g>
+            <g>
+              <circle cx="390" cy="70" r="20" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
+              <text x="390" y="75" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor">4</text>
+              <text x="390" y="112" text-anchor="middle" font-size="11" fill="currentColor">Payment</text>
+              <text x="390" y="126" text-anchor="middle" font-size="10" fill="var(--ink-faint)">Paper.id</text>
+            </g>
+            <g>
+              <circle cx="500" cy="70" r="20" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
+              <text x="500" y="75" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor">5</text>
+              <text x="500" y="112" text-anchor="middle" font-size="11" fill="currentColor">Onboarding</text>
+              <text x="500" y="126" text-anchor="middle" font-size="10" fill="var(--ink-faint)">WA / LMS</text>
+            </g>
+            <g>
+              <circle cx="610" cy="70" r="20" fill="var(--surface)" stroke="var(--accent-2)" stroke-width="2"/>
+              <text x="610" y="75" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor">6</text>
+              <text x="610" y="112" text-anchor="middle" font-size="11" fill="currentColor">Work-sim</text>
+              <text x="610" y="126" text-anchor="middle" font-size="10" fill="var(--ink-faint)">Per-batch sheet</text>
+            </g>
+            <g>
+              <circle cx="700" cy="70" r="20" fill="var(--surface)" stroke="var(--accent-2)" stroke-width="2"/>
+              <text x="700" y="75" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor">7</text>
+              <text x="700" y="112" text-anchor="middle" font-size="11" fill="currentColor">Matchmaking</text>
+              <text x="700" y="126" text-anchor="middle" font-size="10" fill="var(--ink-faint)">Per-batch sheet</text>
+            </g>
+            <g>
+              <circle cx="790" cy="70" r="20" fill="var(--surface)" stroke="var(--accent-2)" stroke-width="2"/>
+              <text x="790" y="75" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor">8</text>
+              <text x="790" y="112" text-anchor="middle" font-size="11" fill="currentColor">Internship</text>
+              <text x="790" y="126" text-anchor="middle" font-size="10" fill="var(--ink-faint)">Per-batch sheet</text>
+            </g>
+            <g>
+              <circle cx="880" cy="70" r="20" fill="var(--surface)" stroke="var(--accent-2)" stroke-width="2"/>
+              <text x="880" y="75" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor">9</text>
+              <text x="880" y="112" text-anchor="middle" font-size="11" fill="currentColor">Job search</text>
+              <text x="880" y="126" text-anchor="middle" font-size="10" fill="var(--ink-faint)">Per-batch sheet</text>
+            </g>
+          </g>
+          <text x="500" y="160" text-anchor="middle" font-size="12" fill="var(--accent-2)" font-family="IBM Plex Mono, monospace">ID not structurally enforced past this point — each sheet is hand-built per batch</text>
+        </svg>
+        <figcaption>Phases 1–5 carry the Student ID reliably through the Sales Order / invoice chain. Phases 6–9 each depend on a manually recreated per-batch sheet, where nothing forces the ID to be included.</figcaption>
+      </figure>
+      <div class="diagram-legend">
+        <span><i class="solid"></i> ID reliably linked</span>
+        <span><i class="dashed"></i> ID not structurally enforced</span>
+      </div>
+    </section>
+
+    <section id="phases">
+      <div class="sec-head"><span class="sn">03</span><h2>Step-by-step data flow</h2></div>
+
+      <div class="phase-card">
+        <div class="ph-head"><span class="ph-num">01</span><h3>Lead acquisition &amp; sales</h3></div>
+        <div class="roles">
+          <span class="chip sales"><span class="dot"></span>Sales — primary</span>
+          <span class="chip customer"><span class="dot"></span>Customer</span>
+        </div>
+        <div class="datagrid">
+          <div class="dl">Creates</div>
+          <div class="dv"><span class="pill">Lead ID</span><span class="pill">channel/campaign source</span><span class="pill">contact info</span><span class="pill">quotation (price + scheme)</span><span class="pill">Product ID</span><span class="pill">Sales Order ID + status</span></div>
+          <div class="dl">Stored in</div>
+          <div class="dv">Qontak (CRM) + acquisition sheet</div>
+          <div class="dl">Flows to</div>
+          <div class="dv">
+            <ul class="flow-list">
+              <li>Phase 2 — Sales Order reference carries the student into Admission</li>
+              <li>Phase 4 — Product ID determines the payment bundle/scheme</li>
+              <li>Sales' section of Master Rekonsiliasi (manually, if kept current)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase-card">
+        <div class="ph-head"><span class="ph-num">02</span><h3>Admission</h3></div>
+        <div class="roles">
+          <span class="chip customer"><span class="dot"></span>Customer</span>
+          <span class="chip sales"><span class="dot"></span>Sales</span>
+          <span class="chip lops"><span class="dot"></span>Learning Ops</span>
+        </div>
+        <div class="datagrid">
+          <div class="dl">Creates</div>
+          <div class="dv"><span class="pill">demographic data</span><span class="pill">cognitive test score</span><span class="pill">attempt count</span><span class="pill">alt-major eligibility check</span><span class="pill">bimkar slot booking</span><span class="pill">assigned mentor</span></div>
+          <div class="dl">Stored in</div>
+          <div class="dv">Mastersheet Admission (Google Sheet)</div>
+          <div class="dl">Flows to</div>
+          <div class="dv">
+            <ul class="flow-list">
+              <li>Phase 3 — assigned mentor and student data feed the bimkar session</li>
+              <li>Phase 4 — a failed test after payment triggers the refund flow</li>
+            </ul>
+          </div>
+        </div>
+        <p class="attr-note">Cognitive test scoring is sensitive personal data under UU PDP research (see the PRD) — should be encrypted and access-controlled wherever it lands.</p>
+      </div>
+
+      <div class="phase-card">
+        <div class="ph-head"><span class="ph-num">03</span><h3>Career guidance / bimkar</h3></div>
+        <div class="roles">
+          <span class="chip educator"><span class="dot"></span>Educator — primary</span>
+          <span class="chip customer"><span class="dot"></span>Customer</span>
+          <span class="chip sales"><span class="dot"></span>Sales</span>
+        </div>
+        <div class="datagrid">
+          <div class="dl">Creates</div>
+          <div class="dv"><span class="pill">session notes</span><span class="pill">student feedback</span><span class="pill">mentor report</span><span class="pill">final major + package</span><span class="pill">PKS contract + signature</span><span class="pill">final quotation approval</span></div>
+          <div class="dl">Stored in</div>
+          <div class="dv">Google Form response sheet</div>
+          <div class="dl">Flows to</div>
+          <div class="dv">
+            <ul class="flow-list">
+              <li>Phase 4 — final package and quotation set the invoice and payment scheme</li>
+              <li>Signed PKS becomes the legal record referenced if payment or academic disputes arise</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase-card">
+        <div class="ph-head"><span class="ph-num">04</span><h3>Payment &amp; registration</h3></div>
+        <div class="roles">
+          <span class="chip customer"><span class="dot"></span>Customer — primary</span>
+          <span class="chip sales"><span class="dot"></span>Sales</span>
+          <span class="chip finance"><span class="dot"></span>Finance</span>
+        </div>
+        <div class="datagrid">
+          <div class="dl">Creates</div>
+          <div class="dv"><span class="pill">invoice ID</span><span class="pill">payment status (DG/UG/Selesai)</span><span class="pill">installment schedule</span><span class="pill">student dashboard account</span><span class="pill">refund record</span><span class="pill">batch deferral record</span></div>
+          <div class="dl">Stored in</div>
+          <div class="dv">"DATA MASTER SALES" sheet + Paper.id (system of record for payment)</div>
+          <div class="dl">Flows to</div>
+          <div class="dv">
+            <ul class="flow-list">
+              <li>Should flow to Finance's AR reconciliation — currently manual and unreliable</li>
+              <li>Should flow to Master Rekonsiliasi — not wired today</li>
+              <li>Phase 5 onward — payment/status gates access to onboarding</li>
+            </ul>
+          </div>
+        </div>
+        <div class="gapnote"><b>Gap</b>Finance's actual job is to reconcile this data, but with no live link between Paper.id and the Master Rekonsiliasi sheet, a Data Analyst does it by hand instead. This is the single clearest point where "scattered and not interoperable" costs real accuracy.</div>
+      </div>
+
+      <div class="phase-card">
+        <div class="ph-head"><span class="ph-num">05</span><h3>Onboarding</h3></div>
+        <div class="roles">
+          <span class="chip lops"><span class="dot"></span>Learning Ops — primary</span>
+          <span class="chip customer"><span class="dot"></span>Customer</span>
+          <span class="chip educator"><span class="dot"></span>Educator</span>
+        </div>
+        <div class="datagrid">
+          <div class="dl">Creates</div>
+          <div class="dv"><span class="pill">WA group membership</span><span class="pill">LMS account/access</span><span class="pill">squad assignment</span><span class="pill">mentor + tutorial group</span><span class="pill">mentor coordinator</span><span class="pill">schedule/deadlines</span></div>
+          <div class="dl">Stored in</div>
+          <div class="dv">No formal system — WhatsApp + LMS provisioning, mostly manual</div>
+          <div class="dl">Flows to</div>
+          <div class="dv">
+            <ul class="flow-list">
+              <li>Phase 6 — squad/mentor assignment determines which class and tutoring groups the student joins</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase-card">
+        <div class="ph-head"><span class="ph-num">06</span><h3>Work-simulation classes</h3></div>
+        <div class="roles">
+          <span class="chip educator"><span class="dot"></span>Educator — primary</span>
+          <span class="chip customer"><span class="dot"></span>Customer</span>
+          <span class="chip lops"><span class="dot"></span>Learning Ops</span>
+        </div>
+        <div class="datagrid">
+          <div class="dl">Creates</div>
+          <div class="dv"><span class="pill">attendance (class/tutoring/mentoring)</span><span class="pill">case study + reflection</span><span class="pill">mini-project scores</span><span class="pill">softskills/hardskills grades</span><span class="pill">A–D grading group</span><span class="pill">CV, timeliness, economic condition</span></div>
+          <div class="dl">Stored in</div>
+          <div class="dv">Separate dashboard per batch (Sheet); underlying grades in Moodle → BigQuery</div>
+          <div class="dl">Flows to</div>
+          <div class="dv">
+            <ul class="flow-list">
+              <li>Phase 7 — A–D grading group directly determines the matchmaking tier</li>
+              <li>Should flow to Master Rekonsiliasi's learning section — depends on manual upkeep</li>
+            </ul>
+          </div>
+        </div>
+        <div class="gapnote"><b>Gap</b>This is the first phase where a new spreadsheet is built per batch (Batch 9, 10, 11, 12…) instead of one system filtered by batch — and the first point where the Student ID can silently drop out of the record. Moodle's own BigQuery data lives separately again from the sheet staff actually use daily.</div>
+      </div>
+
+      <div class="phase-card">
+        <div class="ph-head"><span class="ph-num">07</span><h3>Internship matchmaking</h3></div>
+        <div class="roles">
+          <span class="chip customer"><span class="dot"></span>Customer</span>
+          <span class="chip lops"><span class="dot"></span>Learning Ops</span>
+          <span class="chip other"><span class="dot"></span>BD (owns industry partner side — not one of the five)</span>
+        </div>
+        <div class="datagrid">
+          <div class="dl">Creates</div>
+          <div class="dv"><span class="pill">partner classification (A–D)</span><span class="pill">matchmaking round result</span><span class="pill">acceptance/rejection</span><span class="pill">internship contract / SK</span><span class="pill">roles &amp; responsibilities agreement</span></div>
+          <div class="dl">Stored in</div>
+          <div class="dv">Per-batch matchmaking master sheet</div>
+          <div class="dl">Flows to</div>
+          <div class="dv">
+            <ul class="flow-list">
+              <li>Phase 8 — accepted match and signed contract set up the internship record</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase-card">
+        <div class="ph-head"><span class="ph-num">08</span><h3>Internship</h3></div>
+        <div class="roles">
+          <span class="chip educator"><span class="dot"></span>Educator — primary</span>
+          <span class="chip customer"><span class="dot"></span>Customer</span>
+          <span class="chip lops"><span class="dot"></span>Learning Ops</span>
+        </div>
+        <div class="datagrid">
+          <div class="dl">Creates</div>
+          <div class="dv"><span class="pill">journal entries</span><span class="pill">supervisor feedback</span><span class="pill">innovation project</span><span class="pill">1st-month evaluation</span><span class="pill">IDP</span><span class="pill">final grade + report card</span><span class="pill">certificate</span><span class="pill">competency list</span></div>
+          <div class="dl">Stored in</div>
+          <div class="dv">Per-batch internship monitoring dashboard (.xlsx)</div>
+          <div class="dl">Flows to</div>
+          <div class="dv">
+            <ul class="flow-list">
+              <li>Phase 9 — completion status and competency record feed job-search readiness</li>
+              <li>Certificate/competency list is the student's own proof of skill — should be portable and student-owned, not locked in an internal sheet</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase-card">
+        <div class="ph-head"><span class="ph-num">09</span><h3>Job search</h3></div>
+        <div class="roles">
+          <span class="chip customer"><span class="dot"></span>Customer — primary</span>
+          <span class="chip educator"><span class="dot"></span>Educator</span>
+          <span class="chip lops"><span class="dot"></span>Learning Ops</span>
+          <span class="chip finance"><span class="dot"></span>Finance</span>
+        </div>
+        <div class="datagrid">
+          <div class="dl">Creates</div>
+          <div class="dv"><span class="pill">package selection</span><span class="pill">application tracker</span><span class="pill">mentoring log</span><span class="pill">placement status</span><span class="pill">installment restructuring</span><span class="pill">package downgrade record</span></div>
+          <div class="dl">Stored in</div>
+          <div class="dv">Per-batch job-search monitoring dashboard</div>
+          <div class="dl">Flows to</div>
+          <div class="dv">
+            <ul class="flow-list">
+              <li>Placement triggers Finance to restructure any remaining installments — currently a manual handoff back into Paper.id</li>
+              <li>End of journey — this is the last per-batch sheet the Student ID needs to survive into</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <section id="supporting">
+      <div class="sec-head"><span class="sn">04</span><h2>Cross-cutting processes</h2></div>
+      <p>These don't belong to one phase — they run whenever triggered, and they're where Finance and Learning Ops spend most of their actual data-handling time.</p>
+
+      <div class="phase-card">
+        <div class="ph-head"><h3>Payment relief</h3></div>
+        <div class="roles">
+          <span class="chip customer"><span class="dot"></span>Customer</span>
+          <span class="chip sales"><span class="dot"></span>Sales</span>
+          <span class="chip finance"><span class="dot"></span>Finance</span>
+          <span class="chip educator"><span class="dot"></span>Educator (batch deferral routing)</span>
+        </div>
+        <div class="datagrid">
+          <div class="dl">Creates</div>
+          <div class="dv"><span class="pill">relief request + reason</span><span class="pill">eligibility check</span><span class="pill">chosen option (tenor / T-Later / freeze)</span><span class="pill">payment simulation</span><span class="pill">amended contract</span><span class="pill">adjusted invoice</span></div>
+          <div class="dl">Stored in</div>
+          <div class="dv">DATA MASTER SALES / Master Rekonsiliasi + Paper.id</div>
+          <div class="dl">Flows to</div>
+          <div class="dv"><ul class="flow-list"><li>Phase 4's payment record and the post-course billing schedule, once approved</li></ul></div>
+        </div>
+      </div>
+
+      <div class="phase-card">
+        <div class="ph-head"><h3>Downgrade / upgrade / batch deferral</h3></div>
+        <div class="roles"><span class="chip sales"><span class="dot"></span>Sales — primary</span><span class="chip customer"><span class="dot"></span>Customer</span><span class="chip finance"><span class="dot"></span>Finance</span></div>
+        <div class="datagrid">
+          <div class="dl">Creates</div>
+          <div class="dv"><span class="pill">updated SO bundle</span><span class="pill">customer notification record</span><span class="pill">accounting system update</span><span class="pill">Paper.id update</span></div>
+          <div class="dl">Stored in</div>
+          <div class="dv">Sales Order + accounting system + Paper.id — updated by hand in each</div>
+          <div class="dl">Flows to</div>
+          <div class="dv"><ul class="flow-list"><li>Three separate systems Sales must update manually for one decision — a direct interoperability cost</li></ul></div>
+        </div>
+      </div>
+
+      <div class="phase-card">
+        <div class="ph-head"><h3>Post-course billing</h3></div>
+        <div class="roles"><span class="chip finance"><span class="dot"></span>Finance</span><span class="chip customer"><span class="dot"></span>Customer</span></div>
+        <div class="datagrid">
+          <div class="dl">Creates</div>
+          <div class="dv"><span class="pill">remaining installment schedule</span><span class="pill">auto-invoice record</span><span class="pill">access-status flag</span></div>
+          <div class="dl">Stored in</div>
+          <div class="dv">Paper.id (automated billing)</div>
+          <div class="dl">Flows to</div>
+          <div class="dv"><ul class="flow-list"><li>Non-payment triggers access cutoff — enforcement point unclear which role owns it operationally</li></ul></div>
+        </div>
+      </div>
+
+      <div class="phase-card">
+        <div class="ph-head"><h3>Master reconciliation</h3></div>
+        <div class="roles"><span class="chip finance"><span class="dot"></span>Finance (nominal owner)</span><span class="chip sales"><span class="dot"></span>Sales</span><span class="chip lops"><span class="dot"></span>Learning Ops</span><span class="chip other"><span class="dot"></span>Data Analyst (actual doer — not one of the five)</span></div>
+        <div class="datagrid">
+          <div class="dl">Creates</div>
+          <div class="dv"><span class="pill">consolidated sales figures</span><span class="pill">consolidated AR/finance figures</span><span class="pill">consolidated learning figures</span></div>
+          <div class="dl">Stored in</div>
+          <div class="dv">"Master Rekonsiliasi Talenesia" (Google Sheet)</div>
+          <div class="dl">Flows to</div>
+          <div class="dv"><ul class="flow-list"><li>Meant to flow everywhere — sales, finance, and learning all report from it — but each team must remember to keep their own section current</li></ul></div>
+        </div>
+        <div class="gapnote"><b>Gap</b>This sheet is the clearest evidence of the core problem: it's designed to be the shared source of truth, but nothing feeds it automatically, so even Finance — its intended primary user — can't rely on it.</div>
+      </div>
+
+      <div class="phase-card">
+        <div class="ph-head"><h3>Contractor payroll (mentors / tutors / SMEs)</h3></div>
+        <div class="roles"><span class="chip educator"><span class="dot"></span>Educator</span><span class="chip lops"><span class="dot"></span>Learning Ops (validation)</span><span class="chip other"><span class="dot"></span>HR Ops (calculates &amp; pays — not one of the five)</span></div>
+        <div class="datagrid">
+          <div class="dl">Creates</div>
+          <div class="dv"><span class="pill">service-hour log</span><span class="pill">fee calculation output</span><span class="pill">monthly payroll record</span></div>
+          <div class="dl">Stored in</div>
+          <div class="dv">Mentor roster sheet + fee-calculation sheet</div>
+          <div class="dl">Flows to</div>
+          <div class="dv"><ul class="flow-list"><li>HR Ops payroll run each month — scope for this platform still to be decided (see the PRD's open questions)</li></ul></div>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <footer class="doc-footer">
+    <span>Talenesia Student Journey — data flow map</span>
+    <span>techteam-talenesia/systemenhancement</span>
+  </footer>
+</div>
